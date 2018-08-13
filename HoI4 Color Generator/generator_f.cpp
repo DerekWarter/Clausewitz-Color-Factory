@@ -21,6 +21,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see https://www.gnu.org/licenses/.
 */
 
+/* This is ugly, and it would have come out better if it were object-oriented, but my primary concern was to experiment with generative algorithms and test my productivity. */
+
 /*Reads description.csv files to find reserved values.*/
 
 RGB getReservedList(std::string csv) {
@@ -202,9 +204,9 @@ void selectionRGBSort(RGB &values) {
 			unsigned short alG = (unsigned short)std::stoi(assumedLowest[1]);
 			unsigned short alB = (unsigned short)std::stoi(assumedLowest[2]);
 
-			if (getContrast(ctR, ctG, ctB) < getContrast(alR, alG, alB)) {
+			if (getContrast(ctR, ctG, ctB) < getContrast(alR, alG, alB))
 				iMin = i;
-			}
+			
 
 		}
 
