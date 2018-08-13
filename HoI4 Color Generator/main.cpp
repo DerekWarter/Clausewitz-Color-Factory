@@ -3,11 +3,11 @@
 #include "generator_f.h"
 
 /*
-	Author: Isan Nyat
-	E-mail: syringe232@gmail.com
+	Author: Derek Warter
+	E-mail: derekwarter@gmail.com
 	Clausewitz Color Factory
 	Deterministically generates unreserved color values for use with the Clausewitz Engine's provincial maps.
-	Copyright (C) 2018 Isan Nyat
+	Copyright (C) 2018 Derek Warter
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
