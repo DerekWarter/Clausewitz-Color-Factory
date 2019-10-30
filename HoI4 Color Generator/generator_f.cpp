@@ -21,8 +21,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see https://www.gnu.org/licenses/.
 */
 
-/* This is ugly, and it would have come out better if it were object-oriented, but my primary concern was to experiment with generative algorithms and test my productivity. */
-
 /*Reads description.csv files to find reserved values.*/
 
 RGB getReservedList(std::string csv) {
@@ -32,7 +30,7 @@ RGB getReservedList(std::string csv) {
 	unsigned int i = 0;
 
 	/*
-		The below doesn't trigger if the file is missing, but the file does not need to exist for the program to work. Kept as a failsafe.
+		Failsafe.
 	*/
 
 	if (definition.eof())
@@ -60,7 +58,7 @@ RGB getReservedList(std::string csv) {
 
 }
 
-/*Collects and validates user input.*/
+/*Collects and validates user input. Very ugly function, but it does what it must.*/
 
 void validateUserInput(long &pCount, short &contrast, short *clampVals, std::string &confirm) {
 
@@ -164,7 +162,7 @@ double getContrast(unsigned short r, unsigned short g, unsigned short b) {
 	return (double)((299 * r + 587 * g + 114 * b) / 1000);
 }
 
-/*Generate hash table for reserved values so that the color generator can reject unacceptable outputs.*/
+/*Generate map for reserved values so that the color generator can reject unacceptable outputs.*/
 
 std::unordered_map<std::string, std::string> hashReservedList(RGB values) {
 
@@ -180,7 +178,7 @@ std::unordered_map<std::string, std::string> hashReservedList(RGB values) {
 }
 
 /*Horribly inefficient means of sorting RGB values by luminance.
-Unfortunately merge sort and quicksort induce too much overhead, and insertion sort does not offer much of an improvement.
+Unfortunately merge sort and quicksort quickly overwhelm the callstack, and insertion sort does not offer much of an improvement.
 Given that most users will attempt to generate less than 1000 values, this is an acceptable algorithm.*/
 
 void selectionRGBSort(RGB &values) {
@@ -311,14 +309,6 @@ RGB generateUnreservedValues(std::unordered_map<std::string, std::string> hashMa
 		double curContrast = std::abs(getContrast(r, g, b) - previousContrast);
 		int desiredContrastStep = std::max((int)(mContrast - curContrast), 1);
 
-		/*
-		DEPRECATED:
-		if (r < clampVals[3]) { r = std::min(r + desiredContrastStep, (int)clampVals[3]); }
-		else if (g < clampVals[4]) { g = std::min(g + desiredContrastStep, (int)clampVals[4]); r = clampVals[0]; }
-		else if (b < clampVals[5]) { b = std::min(b + desiredContrastStep, (int)clampVals[5]); g = clampVals[1]; }
-		else throw std::runtime_error("Could not generate requested colors.");
-		*/
-
 		colorOdometer(r, g, b, desiredContrastStep, clampVals, min, colorTurn, justTurned);
 
 		/* Concatenate color values into string key that can be compared against hashes. */
@@ -390,6 +380,7 @@ void RGBToText(RGB values) {
 }
 
 /*Get smallest 1:1 image size to contain all generated values.*/
+/*Consider starting at numColors and then decrementing until we find a value with a root.*/
 
 int squarePalette(int numColors) {
 
@@ -403,7 +394,7 @@ int squarePalette(int numColors) {
 
 }
 
-/*All credit to deusmacabre/Morgoth: https://stackoverflow.com/questions/2654480/writing-bmp-image-in-pure-c-c-without-other-libraries*/
+/*https://stackoverflow.com/questions/2654480/writing-bmp-image-in-pure-c-c-without-other-libraries*/
 
 void RGBToBMP(RGB values, int squaredColors) {
 
